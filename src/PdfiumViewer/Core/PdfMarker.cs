@@ -40,7 +40,7 @@ namespace PdfiumViewer.Core
             Rect? bounds = renderer.BoundsFromPdf(new PdfRectangle(Page, Bounds));
             if (bounds == null) return;
 
-            var brush = new SolidColorBrush(Color) { Opacity = .7 };
+            var brush = new SolidColorBrush(Color) { Opacity = .5 };
             graphics.DrawRectangle(brush, null, bounds.Value);
 
             if (BorderWidth > 0)
