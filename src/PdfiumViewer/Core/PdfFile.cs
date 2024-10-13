@@ -49,9 +49,10 @@ namespace PdfiumViewer.Core
                 if (line?.StartsWith("%PDF") == true)
                 {
                     int index = line.IndexOf('\r');
-                    if (index < 0)
+                    int index2 = line.IndexOf('\n');
+                    if (index2 > 0 && index2 < index)
                     {
-                        index = line.IndexOf('\n');
+                        index = index2;
                     }
                     if (index > 0)
                     {
