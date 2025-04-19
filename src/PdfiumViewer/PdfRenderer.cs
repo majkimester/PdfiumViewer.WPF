@@ -72,6 +72,9 @@ namespace PdfiumViewer
             Markers.Clear();
             _markersByPage = null;
             Panel.Children.Clear();
+            Rotate = PdfRotation.Rotate0;
+            ZoomFactor = DefaultZoomFactor;
+            Zoom = DefaultZoom;
             GC.Collect();
         }
 

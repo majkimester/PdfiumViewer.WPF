@@ -9,6 +9,7 @@ namespace PdfiumViewer
         public const double DefaultZoomMin = 0.1;
         public const double DefaultZoomMax = 4;
         public const double DefaultZoomFactor = 1.2;
+        public const double DefaultZoom = 1.0;
 
         /// <summary>
         /// Zoom allowed.
@@ -59,7 +60,7 @@ namespace PdfiumViewer
                 }
             }
         }
-        private double _zoom = 1.0;
+        private double _zoom = DefaultZoom;
 
         /// <summary>
         /// Maximum zoom level.
