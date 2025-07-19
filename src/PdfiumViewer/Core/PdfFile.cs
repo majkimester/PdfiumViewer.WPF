@@ -48,12 +48,8 @@ namespace PdfiumViewer.Core
                 String line = Encoding.UTF8.GetString(buffer);
                 if (line?.StartsWith("%PDF") == true)
                 {
-                    int index = line.IndexOf('\r');
-                    int index2 = line.IndexOf('\n');
-                    if (index2 > 0 && index2 < index)
-                    {
-                        index = index2;
-                    }
+                    line = line.Replace('\r', '\n');
+                    int index = line.IndexOf('\n');
                     if (index > 0)
                     {
                         _pdfVersion = line.Substring(5, index - 5);
