@@ -52,7 +52,7 @@ namespace PdfiumViewer.Core
                     int index = line.IndexOf('\n');
                     if (index > 0)
                     {
-                        _pdfVersion = line.Substring(5, index - 5);
+                        _pdfVersion = line.Substring(5, index - 5).Trim();
                     }
                 }
             }
