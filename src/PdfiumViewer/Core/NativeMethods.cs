@@ -6,6 +6,8 @@ namespace PdfiumViewer.Core
 {
     internal static partial class NativeMethods
     {
+        private const string LIBPDFIUM = "pdfium.dll";
+
         public const int GmAdvanced = 2;
         public const uint MwtLeftMultiply = 2;
 
@@ -23,15 +25,55 @@ namespace PdfiumViewer.Core
                 TryLoadNativeLibrary(Path.GetDirectoryName(typeof(NativeMethods).Assembly.Location));
         }
 
-        private static bool TryLoadNativeLibrary(string path)
+        private static bool TryLoadNativeLibrary(string basePath)
         {
-            if (path == null)
+            if (string.IsNullOrEmpty(basePath))
                 return false;
 
-            path = Path.Combine(path, IntPtr.Size == 4 ? "x86" : "x64");
-            path = Path.Combine(path, "Pdfium.dll");
+            string archFolder = GetArchitectureFolder();
 
-            return File.Exists(path) && LoadLibrary(path) != IntPtr.Zero;
+            string fullPath = Path.Combine(basePath, archFolder, LIBPDFIUM);
+
+            if (!File.Exists(fullPath))
+                return false;
+
+            IntPtr handle = LoadLibrary(fullPath);
+            return handle != IntPtr.Zero;
+        }
+
+        private static string GetArchitectureFolder()
+        {
+            if (!Environment.Is64BitProcess)
+                return "x86";
+            else
+                return IsArm64() ? "arm64" : "x64";
+        }
+
+        private static bool IsArm64()
+        {
+            SYSTEM_INFO info;
+            GetNativeSystemInfo(out info);
+            const ushort PROCESSOR_ARCHITECTURE_ARM64 = 12;
+            return info.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM64;
+        }
+
+        [DllImport("kernel32")]
+        private static extern void GetNativeSystemInfo(out SYSTEM_INFO lpSystemInfo);
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct SYSTEM_INFO
+        {
+            public ushort wProcessorArchitecture;
+            public ushort wReserved;
+            public uint dwPageSize;
+            public IntPtr lpMinimumApplicationAddress;
+            public IntPtr lpMaximumApplicationAddress;
+            public IntPtr dwActiveProcessorMask;
+            public uint dwNumberOfProcessors;
+            public uint dwProcessorType;
+            public uint dwAllocationGranularity;
+            public ushort wProcessorLevel;
+            public ushort wProcessorRevision;
         }
 
         [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Auto)]
