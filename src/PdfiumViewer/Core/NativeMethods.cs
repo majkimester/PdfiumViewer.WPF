@@ -51,29 +51,7 @@ namespace PdfiumViewer.Core
 
         private static bool IsArm64()
         {
-            SYSTEM_INFO info;
-            GetNativeSystemInfo(out info);
-            const ushort PROCESSOR_ARCHITECTURE_ARM64 = 12;
-            return info.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ARM64;
-        }
-
-        [DllImport("kernel32")]
-        private static extern void GetNativeSystemInfo(out SYSTEM_INFO lpSystemInfo);
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct SYSTEM_INFO
-        {
-            public ushort wProcessorArchitecture;
-            public ushort wReserved;
-            public uint dwPageSize;
-            public IntPtr lpMinimumApplicationAddress;
-            public IntPtr lpMaximumApplicationAddress;
-            public IntPtr dwActiveProcessorMask;
-            public uint dwNumberOfProcessors;
-            public uint dwProcessorType;
-            public uint dwAllocationGranularity;
-            public ushort wProcessorLevel;
-            public ushort wProcessorRevision;
+            return RuntimeInformation.OSArchitecture == Architecture.Arm64;
         }
 
         [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Auto)]
